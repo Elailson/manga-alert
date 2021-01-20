@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mensagem_constraint_interno"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/mensagem"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="12dp"
+            android:paddingStart="20dp"
+            android:paddingTop="50dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="50dp"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/mensagem_constraint_interno"
+            app:layout_constraintStart_toStartOf="@id/mensagem_constraint_interno"
+            app:layout_constraintTop_toTopOf="@id/mensagem_constraint_interno"
+            tools:text="Aqui vai um texto aleatório só para teste mesmo." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
