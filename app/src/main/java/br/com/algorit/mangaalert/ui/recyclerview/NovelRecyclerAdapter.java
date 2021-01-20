@@ -16,15 +16,16 @@ import java.util.List;
 import br.com.algorit.mangaalert.R;
 import br.com.algorit.mangaalert.database.MangaDB;
 import br.com.algorit.mangaalert.model.Manga;
+import br.com.algorit.mangaalert.model.Novel;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class NovelRecyclerAdapter extends RecyclerView.Adapter<NovelRecyclerAdapter.MyViewHolder> {
 
-    private final List<Manga> listaManga;
+    private final List<Novel> novels;
     private final Context context;
     private final ItemClickListener clickListener;
 
-    public RecyclerAdapter(ItemClickListener clickListener, Context context, List<Manga> listaManga) {
-        this.listaManga = listaManga;
+    public NovelRecyclerAdapter(ItemClickListener clickListener, Context context, List<Novel> novels) {
+        this.novels = novels;
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -38,37 +39,37 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String titulo = listaManga.get(position).getNome();
+        String titulo = novels.get(position).getNome();
         holder.titulo.setText(titulo);
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                listaManga.get(position).setChecked(isChecked));
+                novels.get(position).setChecked(isChecked));
 
         markChecked();
-        holder.checkBox.setChecked(listaManga.get(position).isChecked());
+        holder.checkBox.setChecked(novels.get(position).isChecked());
     }
 
     @Override
     public int getItemCount() {
-        return listaManga.size();
+        return novels.size();
     }
 
-    public List<Manga> getCheckedItems() {
-        List<Manga> checkedItems = new ArrayList<>();
-        for (Manga manga : listaManga) {
-            if (manga.isChecked())
-                checkedItems.add(manga);
+    public List<Novel> getCheckedItems() {
+        List<Novel> checkedItems = new ArrayList<>();
+        for (Novel novel : novels) {
+            if (novel.isChecked())
+                checkedItems.add(novel);
         }
         return checkedItems;
     }
 
     private void markChecked() {
         MangaDB mangaDB = new MangaDB(context);
-        List<Manga> mangas = mangaDB.getPrediletos();
-        for (Manga manga : mangas) {
+//        List<Novel> novels = mangaDB.getPrediletos();
+        for (Novel novel : novels) {
             for (int i = 0; i < getItemCount(); i++) {
-                if (manga.getNome().equals(listaManga.get(i).getNome())) {
-                    listaManga.get(i).setChecked(true);
+                if (novel.getNome().equals(novels.get(i).getNome())) {
+                    novels.get(i).setChecked(true);
                 }
             }
         }

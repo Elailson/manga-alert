@@ -18,9 +18,9 @@ import java.util.List;
 
 import br.com.algorit.mangaalert.R;
 import br.com.algorit.mangaalert.model.Manga;
+import br.com.algorit.mangaalert.model.Novel;
 import br.com.algorit.mangaalert.retrofit.MangaService;
 import br.com.algorit.mangaalert.ui.PagerAdapter;
-import br.com.algorit.mangaalert.ui.fragment.MangaFragment;
 import br.com.algorit.mangaalert.util.BlockUI;
 import br.com.algorit.mangaalert.util.Notification;
 import br.com.algorit.mangaalert.util.Worker;
@@ -57,19 +57,22 @@ public class TabActivity extends AppCompatActivity {
         return false;
     }
 
-    private void configTabLayout(List<Manga> mangas) {
+    private void configTabLayout(List<Manga> mangas, List<Novel> novels) {
         TabLayout tabLayout = findViewById(R.id.activity_tab_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Mangá"));
         tabLayout.addTab(tabLayout.newTab().setText("Manhua"));
         tabLayout.addTab(tabLayout.newTab().setText("Novel"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        configViewPager(tabLayout, mangas);
+        configViewPager(tabLayout, mangas, novels);
     }
 
-    private void configViewPager(TabLayout tabLayout, List<Manga> mangas) {
+    private void configViewPager(TabLayout tabLayout, List<Manga> mangas, List<Novel> novels) {
         final ViewPager viewPager = findViewById(R.id.activity_tab_pager);
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), getApplicationContext(), TabActivity.this, mangas);
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),
+                tabLayout.getTabCount(), getApplicationContext(), TabActivity.this,
+                mangas, novels);
+
         viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -103,12 +106,28 @@ public class TabActivity extends AppCompatActivity {
         mangaService.findAll(new MangaService.ResponseCallback<List<Manga>>() {
             @Override
             public void success(List<Manga> response) {
-                configTabLayout(response);
+                findNovels(response);
+                blockUI.stop();
             }
 
             @Override
             public void fail(String erro) {
-                Log.e(MangaFragment.class.getCanonicalName(), erro);
+                Log.e(TabActivity.class.getCanonicalName(), erro);
+            }
+        });
+    }
+
+    private void findNovels(List<Manga> mangas) {
+        MangaService mangaService = new MangaService();
+        mangaService.findAllNovel(new MangaService.ResponseCallback<List<Novel>>() {
+            @Override
+            public void success(List<Novel> response) {
+                configTabLayout(mangas, response);
+            }
+
+            @Override
+            public void fail(String erro) {
+                Log.e(TabActivity.class.getCanonicalName(), erro);
             }
         });
     }

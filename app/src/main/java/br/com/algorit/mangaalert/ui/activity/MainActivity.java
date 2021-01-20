@@ -37,7 +37,7 @@ import br.com.algorit.mangaalert.model.Manga;
 import br.com.algorit.mangaalert.retrofit.MangaService;
 import br.com.algorit.mangaalert.ui.dialog.GenericDialog;
 import br.com.algorit.mangaalert.ui.recyclerview.ItemClickListener;
-import br.com.algorit.mangaalert.ui.recyclerview.RecyclerAdapter;
+import br.com.algorit.mangaalert.ui.recyclerview.MangaRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener {
 
@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     private void initAndConfigureRecycler(List<Manga> listaManga) {
         recyclerView = findViewById(R.id.activity_main_recycler_view);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, getApplicationContext(), listaManga);
+        MangaRecyclerAdapter mangaRecyclerAdapter = new MangaRecyclerAdapter(this, getApplicationContext(), listaManga);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setAdapter(mangaRecyclerAdapter);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private void showAd() {
         if (interstitialAd.isLoaded()) {
             interstitialAd.show();
-            List<Manga> listaManga = ((RecyclerAdapter) recyclerView.getAdapter()).getCheckedItems();
+            List<Manga> listaManga = ((MangaRecyclerAdapter) recyclerView.getAdapter()).getCheckedItems();
             mangaDB.insertPrediletos(listaManga);
             mangaDB.insertMangaNome(listaManga);
             new GenericDialog(this).show("Preferências atualizadas!");

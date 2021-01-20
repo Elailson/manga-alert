@@ -25,6 +25,7 @@ public class MangaDB extends SQLiteOpenHelper {
         String tablePredileto = "CREATE TABLE PREDILETO (NOME TEXT, CHECKED INTEGER)";
 
         String tableManga = "CREATE TABLE MANGA (NOME TEXT, CAPITULO REAL)";
+        String tableNovel = "CREATE TABLE NOVEL (NOME TEXT, CAPITULO REAL)";
 
         db.execSQL(tablePredileto);
         db.execSQL(tableManga);

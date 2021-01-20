@@ -2,7 +2,6 @@ package br.com.algorit.mangaalert.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,12 +24,11 @@ import com.google.android.gms.ads.MobileAds;
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.database.MangaDB;
 import br.com.algorit.mangaalert.model.Manga;
 import br.com.algorit.mangaalert.ui.activity.TabActivity;
-import br.com.algorit.mangaalert.ui.dialog.GenericDialog;
 import br.com.algorit.mangaalert.ui.recyclerview.ItemClickListener;
-import br.com.algorit.mangaalert.ui.recyclerview.RecyclerAdapter;
+import br.com.algorit.mangaalert.ui.recyclerview.MangaRecyclerAdapter;
+import br.com.algorit.mangaalert.util.AdMob;
 
 public class MangaFragment extends Fragment implements ItemClickListener {
 
@@ -39,7 +37,6 @@ public class MangaFragment extends Fragment implements ItemClickListener {
     private final List<Manga> mangas;
     private InterstitialAd interstitialAd;
     private RecyclerView recyclerView;
-    private MangaDB mangaDB;
 
     public MangaFragment(TabActivity activity, Context context, List<Manga> mangas) {
         this.activity = activity;
@@ -62,7 +59,6 @@ public class MangaFragment extends Fragment implements ItemClickListener {
 
     private void init(View view) {
         initAdMob();
-        mangaDB = new MangaDB(context);
         initAndConfigureRecycler(mangas, view);
     }
 
@@ -73,16 +69,16 @@ public class MangaFragment extends Fragment implements ItemClickListener {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        showAd();
+        callAd();
         return super.onOptionsItemSelected(item);
     }
 
     private void initAndConfigureRecycler(List<Manga> listaManga, View view) {
         recyclerView = view.findViewById(R.id.fragment_manga_recycler_view);
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, context, listaManga);
+        MangaRecyclerAdapter mangaRecyclerAdapter = new MangaRecyclerAdapter(this, context, listaManga);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setAdapter(mangaRecyclerAdapter);
     }
 
     @Override
@@ -107,25 +103,8 @@ public class MangaFragment extends Fragment implements ItemClickListener {
         });
     }
 
-    private void showAd() {
-        if (interstitialAd.isLoaded()) {
-            interstitialAd.show();
-            RecyclerAdapter adapter = ((RecyclerAdapter) recyclerView.getAdapter());
-            if (adapter != null) {
-                List<Manga> listaManga = adapter.getCheckedItems();
-                mangaDB.insertPrediletos(listaManga);
-                mangaDB.insertMangaNome(listaManga);
-                new GenericDialog(this.activity).show("Preferências atualizadas!");
-            } else {
-                new GenericDialog(this.activity).show("Tente novamente!");
-            }
-        } else {
-            try {
-                Thread.sleep(500);
-            } catch (Exception ex) {
-                Log.e(MangaFragment.class.getCanonicalName(), "Erro ao tentar exibir AD: " + ex.getMessage());
-            }
-            showAd();
-        }
+    private void callAd() {
+        AdMob adMob = new AdMob(this.activity, this.context, this.interstitialAd, this.recyclerView);
+        adMob.showAd();
     }
 }
