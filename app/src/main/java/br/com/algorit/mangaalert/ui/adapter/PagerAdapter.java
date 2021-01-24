@@ -1,4 +1,4 @@
-package br.com.algorit.mangaalert.ui;
+package br.com.algorit.mangaalert.ui.adapter;
 
 import android.content.Context;
 

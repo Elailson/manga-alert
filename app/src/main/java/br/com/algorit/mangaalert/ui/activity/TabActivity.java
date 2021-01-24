@@ -20,7 +20,7 @@ import br.com.algorit.mangaalert.R;
 import br.com.algorit.mangaalert.model.Manga;
 import br.com.algorit.mangaalert.model.Novel;
 import br.com.algorit.mangaalert.retrofit.MangaService;
-import br.com.algorit.mangaalert.ui.PagerAdapter;
+import br.com.algorit.mangaalert.ui.adapter.PagerAdapter;
 import br.com.algorit.mangaalert.util.BlockUI;
 import br.com.algorit.mangaalert.util.Notification;
 import br.com.algorit.mangaalert.util.Worker;

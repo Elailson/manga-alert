@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,7 @@ public class MangaFragment extends Fragment implements ItemClickListener {
     private final List<Manga> mangas;
     private InterstitialAd interstitialAd;
     private RecyclerView recyclerView;
+    private MangaRecyclerAdapter mangaRecyclerAdapter;
 
     public MangaFragment(TabActivity activity, Context context, List<Manga> mangas) {
         this.activity = activity;
@@ -75,9 +77,10 @@ public class MangaFragment extends Fragment implements ItemClickListener {
 
     private void initAndConfigureRecycler(List<Manga> listaManga, View view) {
         recyclerView = view.findViewById(R.id.fragment_manga_recycler_view);
-        MangaRecyclerAdapter mangaRecyclerAdapter = new MangaRecyclerAdapter(this, context, listaManga);
+        mangaRecyclerAdapter = new MangaRecyclerAdapter(this, context, listaManga);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+//        new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(mangaRecyclerAdapter);
     }
 
@@ -102,6 +105,19 @@ public class MangaFragment extends Fragment implements ItemClickListener {
             }
         });
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            mangas.remove(viewHolder.getAdapterPosition());
+            mangaRecyclerAdapter.notifyDataSetChanged();
+        }
+    };
 
     private void callAd() {
         AdMob adMob = new AdMob(this.activity, this.context, this.interstitialAd, this.recyclerView);

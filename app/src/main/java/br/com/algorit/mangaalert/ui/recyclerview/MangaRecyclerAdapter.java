@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
@@ -27,6 +28,8 @@ public class MangaRecyclerAdapter extends RecyclerView.Adapter<MangaRecyclerAdap
         this.listaManga = listaManga;
         this.context = context;
         this.clickListener = clickListener;
+
+        markChecked();
     }
 
     @NonNull
@@ -44,7 +47,6 @@ public class MangaRecyclerAdapter extends RecyclerView.Adapter<MangaRecyclerAdap
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
                 listaManga.get(position).setChecked(isChecked));
 
-        markChecked();
         holder.checkBox.setChecked(listaManga.get(position).isChecked());
     }
 
@@ -72,6 +74,7 @@ public class MangaRecyclerAdapter extends RecyclerView.Adapter<MangaRecyclerAdap
                 }
             }
         }
+        Collections.sort(this.listaManga, Manga::compareTo);
         mangaDB.close();
     }
 
