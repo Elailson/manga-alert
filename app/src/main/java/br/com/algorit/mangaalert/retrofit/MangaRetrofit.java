@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MangaRetrofit {
 
-    private static final String URL_BASE = "http://192.168.0.111:8080/";
+    private static final String URL_BASE = "http://192.168.0.108:8080/api/";
     private final MangaRepository mangaRepository;
 
     public MangaRetrofit() {

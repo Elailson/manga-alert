@@ -1,12 +1,34 @@
-package br.com.algorit.mangaalert.model;
+package br.com.algorit.mangaalert.roomdatabase.model;
 
-public class Manga extends Quadrinho {
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
-    public Manga() {
+@Entity(tableName = "MANGA")
+public class Manga {
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "NOME")
+    private String nome;
+
+    @ColumnInfo(name = "CAPITULO")
+    private Double capitulo;
+
+    @ColumnInfo(name = "CHECKED")
+    private boolean checked;
+
+    @Ignore
+    public Manga(@NonNull String nome) {
+        this.setNome(nome);
     }
 
-    public Manga(String nome) {
-        setNome(nome);
+    public Manga(@NonNull String nome, Double capitulo, boolean checked) {
+        this.nome = nome;
+        this.capitulo = capitulo;
+        this.checked = checked;
     }
 
     public int compareTo(Manga manga) {
@@ -17,5 +39,29 @@ public class Manga extends Quadrinho {
         } else {
             return 0;
         }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Double getCapitulo() {
+        return capitulo;
+    }
+
+    public void setCapitulo(Double capitulo) {
+        this.capitulo = capitulo;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

@@ -1,4 +1,4 @@
-package br.com.algorit.mangaalert.database;
+package br.com.algorit.mangaalert.roomdatabase.database;
 
 import android.content.Context;
 
@@ -6,10 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import br.com.algorit.mangaalert.dao.NovelDao;
-import br.com.algorit.mangaalert.model.Novel;
+import br.com.algorit.mangaalert.roomdatabase.dao.MangaDao;
+import br.com.algorit.mangaalert.roomdatabase.dao.NovelDao;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Novel;
 
-@Database(entities = {Novel.class}, version = 1, exportSchema = false)
+@Database(entities = {Manga.class, Novel.class}, version = 1, exportSchema = false)
 public abstract class AlertRoomDatabase extends RoomDatabase {
 
     private static AlertRoomDatabase INSTANCE;
@@ -28,4 +30,6 @@ public abstract class AlertRoomDatabase extends RoomDatabase {
     }
 
     public abstract NovelDao novelDao();
+
+    public abstract MangaDao mangaDao();
 }

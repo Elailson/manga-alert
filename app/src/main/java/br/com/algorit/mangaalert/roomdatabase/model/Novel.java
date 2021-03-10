@@ -1,4 +1,4 @@
-package br.com.algorit.mangaalert.model;
+package br.com.algorit.mangaalert.roomdatabase.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -29,6 +29,16 @@ public class Novel {
         this.nome = nome;
         this.capitulo = capitulo;
         this.checked = checked;
+    }
+
+    public int compareTo(Novel novel) {
+        if (this.isChecked() && !novel.isChecked()) {
+            return -1;
+        } else if (!this.isChecked() && novel.isChecked()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public String getNome() {

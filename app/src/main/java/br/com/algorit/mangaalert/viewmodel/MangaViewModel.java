@@ -8,32 +8,40 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import br.com.algorit.mangaalert.roomdatabase.model.Novel;
-import br.com.algorit.mangaalert.roomdatabase.repository.NovelRepository;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.repository.MangaRepository;
 
-public class NovelViewModel extends AndroidViewModel {
-    private final NovelRepository novelRepository;
-    private final LiveData<List<Novel>> allNovels;
+public class MangaViewModel extends AndroidViewModel {
+    private final MangaRepository mangaRepository;
+    private final LiveData<List<Manga>> allMangas;
 
-    public NovelViewModel(@NonNull Application application) {
+    public MangaViewModel(@NonNull Application application) {
         super(application);
-        this.novelRepository = new NovelRepository(application);
-        this.allNovels = novelRepository.getAllNovels();
+        this.mangaRepository = new MangaRepository(application);
+        this.allMangas = mangaRepository.getAllMangas();
     }
 
-    public LiveData<List<Novel>> getAllNovels() {
-        return allNovels;
+    public LiveData<List<Manga>> getAllMangas() {
+        return allMangas;
     }
 
-    public void insert(Novel novel) {
-        novelRepository.insert(novel);
+    public List<Manga> getAllChecked() {
+        return mangaRepository.getAllChecked();
     }
 
-    public void updateCapitulo(Novel novel) {
-        novelRepository.updateCapitulo(novel);
+    public void insert(Manga manga) {
+        mangaRepository.insert(manga);
     }
 
-    public void updateChecked(Novel novel) {
-        novelRepository.updateChecked(novel);
+    public void updateCapitulo(Manga manga) {
+        mangaRepository.updateCapitulo(manga);
+    }
+
+    public void updateChecked(Manga manga) {
+        mangaRepository.updateChecked(manga);
+    }
+
+    public void uncheckAll() {
+        mangaRepository.uncheckAll();
     }
 }

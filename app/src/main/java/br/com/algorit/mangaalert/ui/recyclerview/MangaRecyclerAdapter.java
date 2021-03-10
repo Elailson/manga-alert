@@ -15,44 +15,50 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.database.MangaDB;
-import br.com.algorit.mangaalert.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
 
 public class MangaRecyclerAdapter extends RecyclerView.Adapter<MangaRecyclerAdapter.MyViewHolder> {
 
-    private final List<Manga> listaManga;
-    private final Context context;
     private final ItemClickListener clickListener;
+    private final LayoutInflater layoutInflater;
+    private List<Manga> listaManga;
 
-    public MangaRecyclerAdapter(ItemClickListener clickListener, Context context, List<Manga> listaManga) {
-        this.listaManga = listaManga;
-        this.context = context;
+    public MangaRecyclerAdapter(ItemClickListener clickListener, Context context) {
         this.clickListener = clickListener;
-
-        markChecked();
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_lista, parent, false);
-        return new MyViewHolder(view, clickListener, context);
+        View view = layoutInflater.inflate(R.layout.item_lista, parent, false);
+        return new MyViewHolder(view, clickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String titulo = listaManga.get(position).getNome();
-        holder.titulo.setText(titulo);
+        if (listaManga != null) {
+            Manga manga = listaManga.get(position);
+            holder.titulo.setText(manga.getNome());
+            holder.checkBox.setOnCheckedChangeListener(((buttonView, isChecked) ->
+                    manga.setChecked(isChecked)));
+            holder.checkBox.setChecked(manga.isChecked());
+        }
+    }
 
-        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                listaManga.get(position).setChecked(isChecked));
-
-        holder.checkBox.setChecked(listaManga.get(position).isChecked());
+    public void setMangas(List<Manga> mangas) {
+        this.listaManga = mangas;
+        if (listaManga != null) {
+            Collections.sort(this.listaManga, Manga::compareTo);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return listaManga.size();
+        if (this.listaManga != null)
+            return listaManga.size();
+        else return 0;
     }
 
     public List<Manga> getCheckedItems() {
@@ -64,33 +70,19 @@ public class MangaRecyclerAdapter extends RecyclerView.Adapter<MangaRecyclerAdap
         return checkedItems;
     }
 
-    private void markChecked() {
-        MangaDB mangaDB = new MangaDB(context);
-        List<Manga> mangas = mangaDB.getPrediletos();
-        for (Manga manga : mangas) {
-            for (int i = 0; i < getItemCount(); i++) {
-                if (manga.getNome().equals(listaManga.get(i).getNome())) {
-                    listaManga.get(i).setChecked(true);
-                }
-            }
-        }
-        Collections.sort(this.listaManga, Manga::compareTo);
-        mangaDB.close();
-    }
-
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private CheckBox checkBox;
         private TextView titulo;
         private ItemClickListener clickListener;
 
-        MyViewHolder(View itemView, ItemClickListener clickListener, Context context) {
+        MyViewHolder(View itemView, ItemClickListener clickListener) {
             super(itemView);
 
             checkBox = itemView.findViewById(R.id.item_lista_check);
             titulo = itemView.findViewById(R.id.item_lista_titulo);
 
-            itemView.setOnClickListener(view -> clickListener.onItemClick(view, getAdapterPosition()));
+//            itemView.setOnClickListener(view -> clickListener.onItemClick(view, getAdapterPosition()));
         }
     }
 }

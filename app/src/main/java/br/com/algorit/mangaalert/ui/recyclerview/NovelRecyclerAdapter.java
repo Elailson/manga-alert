@@ -11,47 +11,55 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.database.MangaDB;
-import br.com.algorit.mangaalert.model.Manga;
-import br.com.algorit.mangaalert.model.Novel;
+import br.com.algorit.mangaalert.roomdatabase.model.Novel;
 
 public class NovelRecyclerAdapter extends RecyclerView.Adapter<NovelRecyclerAdapter.MyViewHolder> {
 
-    private final List<Novel> novels;
-    private final Context context;
     private final ItemClickListener clickListener;
+    private final LayoutInflater layoutInflater;
+    private List<Novel> novels;
 
-    public NovelRecyclerAdapter(ItemClickListener clickListener, Context context, List<Novel> novels) {
-        this.novels = novels;
-        this.context = context;
+    public NovelRecyclerAdapter(ItemClickListener clickListener, Context context) {
         this.clickListener = clickListener;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_lista, parent, false);
-        return new MyViewHolder(view, clickListener, context);
+        View itemView = layoutInflater.inflate(R.layout.item_lista, parent, false);
+        return new MyViewHolder(itemView, clickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String titulo = novels.get(position).getNome();
-        holder.titulo.setText(titulo);
+        if (novels != null) {
+            Novel novel = novels.get(position);
+            holder.titulo.setText(novel.getNome());
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    novel.setChecked(isChecked));
 
-        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                novels.get(position).setChecked(isChecked));
+            holder.checkBox.setChecked(novel.isChecked());
+        }
+    }
 
-        markChecked();
-        holder.checkBox.setChecked(novels.get(position).isChecked());
+    public void setNovels(List<Novel> novels) {
+        this.novels = novels;
+        if (novels != null) {
+            Collections.sort(this.novels, Novel::compareTo);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return novels.size();
+        if (this.novels != null)
+            return novels.size();
+        else return 0;
     }
 
     public List<Novel> getCheckedItems() {
@@ -63,32 +71,19 @@ public class NovelRecyclerAdapter extends RecyclerView.Adapter<NovelRecyclerAdap
         return checkedItems;
     }
 
-    private void markChecked() {
-        MangaDB mangaDB = new MangaDB(context);
-//        List<Novel> novels = mangaDB.getPrediletos();
-        for (Novel novel : novels) {
-            for (int i = 0; i < getItemCount(); i++) {
-                if (novel.getNome().equals(novels.get(i).getNome())) {
-                    novels.get(i).setChecked(true);
-                }
-            }
-        }
-        mangaDB.close();
-    }
-
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private CheckBox checkBox;
-        private TextView titulo;
+        private final CheckBox checkBox;
+        private final TextView titulo;
         private ItemClickListener clickListener;
 
-        MyViewHolder(View itemView, ItemClickListener clickListener, Context context) {
+        MyViewHolder(View itemView, ItemClickListener clickListener) {
             super(itemView);
 
             checkBox = itemView.findViewById(R.id.item_lista_check);
             titulo = itemView.findViewById(R.id.item_lista_titulo);
 
-            itemView.setOnClickListener(view -> clickListener.onItemClick(view, getAdapterPosition()));
+//            itemView.setOnClickListener(view -> clickListener.onItemClick(view, getAdapterPosition()));
         }
     }
 }

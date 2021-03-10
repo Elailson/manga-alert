@@ -10,8 +10,7 @@ import androidx.core.app.NotificationManagerCompat;
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.database.MangaDB;
-import br.com.algorit.mangaalert.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
 import br.com.algorit.mangaalert.retrofit.MangaService;
 
 public class MangaJobService extends JobService {
@@ -32,7 +31,7 @@ public class MangaJobService extends JobService {
         mangaService.findAll(new MangaService.ResponseCallback<List<Manga>>() {
             @Override
             public void success(List<Manga> response) {
-                notifyManga(response);
+//                notifyManga(response);
             }
 
             @Override
@@ -43,26 +42,26 @@ public class MangaJobService extends JobService {
         jobFinished(params, false);
     }
 
-    public void notifyManga(List<Manga> mangas) {
-        MangaDB mangaDB = new MangaDB(this);
-        List<Manga> mangasPrediletos = mangaDB.getPrediletos();
-        for (Manga predileto : mangasPrediletos) {
-            for (Manga manga : mangas) {
-                if (manga.getNome().equals(predileto.getNome())) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "manga")
-                            .setSmallIcon(R.drawable.ic_manga_24)
-                            .setContentTitle(manga.getNome())
-                            .setContentText("Capitulo " + getNumber(manga.getCapitulo()) + " já disponível")
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-                    notificationManager.notify(200, builder.build());
-                }
-            }
-        }
-        mangaDB.close();
-    }
+//    public void notifyManga(List<Manga> mangas) {
+//        MangaDB mangaDB = new MangaDB(this);
+//        List<Manga> mangasPrediletos = mangaDB.getPrediletos();
+//        for (Manga predileto : mangasPrediletos) {
+//            for (Manga manga : mangas) {
+//                if (manga.getNome().equals(predileto.getNome())) {
+//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "manga")
+//                            .setSmallIcon(R.drawable.ic_manga_24)
+//                            .setContentTitle(manga.getNome())
+//                            .setContentText("Capitulo " + getNumber(manga.getCapitulo()) + " já disponível")
+//                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//
+//                    notificationManager.notify(200, builder.build());
+//                }
+//            }
+//        }
+////        mangaDB.close();
+//    }
 
     private String getNumber(Double capitulo) {
         String value = capitulo.toString();

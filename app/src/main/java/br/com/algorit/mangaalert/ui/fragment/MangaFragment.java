@@ -2,6 +2,7 @@ package br.com.algorit.mangaalert.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,36 +13,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.model.Manga;
-import br.com.algorit.mangaalert.ui.activity.TabActivity;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.ui.dialog.GenericDialog;
 import br.com.algorit.mangaalert.ui.recyclerview.ItemClickListener;
 import br.com.algorit.mangaalert.ui.recyclerview.MangaRecyclerAdapter;
-import br.com.algorit.mangaalert.util.AdMob;
+import br.com.algorit.mangaalert.viewmodel.MangaViewModel;
 
 public class MangaFragment extends Fragment implements ItemClickListener {
 
-    private final TabActivity activity;
     private final Context context;
     private final List<Manga> mangas;
-    private InterstitialAd interstitialAd;
     private RecyclerView recyclerView;
     private MangaRecyclerAdapter mangaRecyclerAdapter;
+    private MangaViewModel mangaViewModel;
 
-    public MangaFragment(TabActivity activity, Context context, List<Manga> mangas) {
-        this.activity = activity;
+    public MangaFragment(Context context, List<Manga> mangas) {
         this.context = context;
         this.mangas = mangas;
     }
@@ -50,6 +45,12 @@ public class MangaFragment extends Fragment implements ItemClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mangaViewModel = ViewModelProviders.of(this).get(MangaViewModel.class);
+        mangaViewModel.getAllMangas().observe(this, returnedMangas -> mangaRecyclerAdapter.setMangas(returnedMangas));
+        for (Manga manga : mangas) {
+            mangaViewModel.insert(manga);
+        }
     }
 
     @Override
@@ -60,8 +61,7 @@ public class MangaFragment extends Fragment implements ItemClickListener {
     }
 
     private void init(View view) {
-        initAdMob();
-        initAndConfigureRecycler(mangas, view);
+        initAndConfigureRecycler(view);
     }
 
     @Override
@@ -71,13 +71,13 @@ public class MangaFragment extends Fragment implements ItemClickListener {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        callAd();
+        saveChanges();
         return super.onOptionsItemSelected(item);
     }
 
-    private void initAndConfigureRecycler(List<Manga> listaManga, View view) {
+    private void initAndConfigureRecycler(View view) {
         recyclerView = view.findViewById(R.id.fragment_manga_recycler_view);
-        mangaRecyclerAdapter = new MangaRecyclerAdapter(this, context, listaManga);
+        mangaRecyclerAdapter = new MangaRecyclerAdapter(this, context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 //        new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerView);
@@ -86,24 +86,6 @@ public class MangaFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onItemClick(View view, int position) {
-    }
-
-    private void initAdMob() {
-        String idTeste = "ca-app-pub-3940256099942544/1033173712";
-        String idProd = "ca-app-pub-6750275666832506/4671759050";
-
-        MobileAds.initialize(context, initializationStatus -> {
-        });
-        interstitialAd = new InterstitialAd(context);
-        interstitialAd.setAdUnitId(idTeste);
-        interstitialAd.loadAd(new AdRequest.Builder().build());
-
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                interstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-        });
     }
 
     ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -119,8 +101,13 @@ public class MangaFragment extends Fragment implements ItemClickListener {
         }
     };
 
-    private void callAd() {
-        AdMob adMob = new AdMob(this.activity, this.context, this.interstitialAd, this.recyclerView);
-        adMob.showAd();
+    private void saveChanges() {
+        List<Manga> listaManga = ((MangaRecyclerAdapter) recyclerView.getAdapter()).getCheckedItems();
+        mangaViewModel.uncheckAll();
+        for (Manga manga : listaManga) {
+            Log.i(MangaFragment.class.getCanonicalName(), "============== SAVE CHANGES: " + manga.getNome());
+            mangaViewModel.updateChecked(manga);
+        }
+        new GenericDialog(getContext()).show("Preferências atualizadas!");
     }
 }

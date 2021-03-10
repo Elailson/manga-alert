@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-import br.com.algorit.mangaalert.model.Manga;
-import br.com.algorit.mangaalert.model.Novel;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Novel;
 import br.com.algorit.mangaalert.ui.activity.TabActivity;
 import br.com.algorit.mangaalert.ui.fragment.MangaFragment;
 import br.com.algorit.mangaalert.ui.fragment.ManhuaFragment;
@@ -39,11 +39,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new MangaFragment(this.activity, this.context, this.mangas);
+                return new MangaFragment(this.context, this.mangas);
             case 1:
                 return new ManhuaFragment();
             case 2:
-                return new NovelFragment(this.activity, this.context, this.novels);
+                return new NovelFragment(this.context, this.novels);
             default:
                 return null;
         }

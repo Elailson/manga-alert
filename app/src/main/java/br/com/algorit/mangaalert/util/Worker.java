@@ -1,34 +1,46 @@
 package br.com.algorit.mangaalert.util;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 import br.com.algorit.mangaalert.job.BackgroundWorker;
 
 public class Worker {
 
-    private final Context context;
-
     public Worker(Context context) {
-        this.context = context;
-        worker();
+        WeakReference<Context> weakContext = new WeakReference<>(context);
+        new WorkerAsyncTask(weakContext).execute();
     }
 
-    private void worker() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
+    private static class WorkerAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, 20, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build();
+        private final WeakReference<Context> weakContext;
 
-        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
+        WorkerAsyncTask(WeakReference<Context> weakContext) {
+            this.weakContext = weakContext;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWorker.class, 2, TimeUnit.MINUTES)
+                    .setConstraints(constraints)
+                    .build();
+
+            WorkManager.getInstance(weakContext.get()).enqueue(periodicWorkRequest);
+
+            return null;
+        }
     }
 }

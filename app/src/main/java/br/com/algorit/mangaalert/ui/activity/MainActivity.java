@@ -2,14 +2,12 @@ package br.com.algorit.mangaalert.ui.activity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,21 +17,21 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.database.MangaDB;
 import br.com.algorit.mangaalert.job.BackgroundWorker;
-import br.com.algorit.mangaalert.job.MangaJobService;
-import br.com.algorit.mangaalert.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
 import br.com.algorit.mangaalert.retrofit.MangaService;
 import br.com.algorit.mangaalert.ui.dialog.GenericDialog;
 import br.com.algorit.mangaalert.ui.recyclerview.ItemClickListener;
@@ -44,14 +42,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private InterstitialAd interstitialAd;
     private FloatingActionButton floatingButton;
     private RecyclerView recyclerView;
-    private MangaDB mangaDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(MainActivity.class.getCanonicalName(), "============================================ ON CREATE ============================================");
         setContentView(R.layout.activity_main);
         createNotificationChannel();
-//        job();
         init();
         worker();
     }
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private void init() {
         initAdMob();
         floatingButton = findViewById(R.id.activity_main_floating_button);
-        mangaDB = new MangaDB(getApplicationContext());
         MangaService mangaService = new MangaService();
         mangaService.findAll(new MangaService.ResponseCallback<List<Manga>>() {
             @Override
@@ -81,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     private void initAndConfigureRecycler(List<Manga> listaManga) {
         recyclerView = findViewById(R.id.activity_main_recycler_view);
-        MangaRecyclerAdapter mangaRecyclerAdapter = new MangaRecyclerAdapter(this, getApplicationContext(), listaManga);
+        MangaRecyclerAdapter mangaRecyclerAdapter = new MangaRecyclerAdapter(this, getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(mangaRecyclerAdapter);
@@ -89,19 +85,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public void onItemClick(View view, int position) {
-    }
-
-    private void job() {
-        ComponentName componentName = new ComponentName(this, MangaJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setRequiresCharging(true)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPersisted(true)
-                .setPeriodic(1000L * 10L)
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.schedule(info);
     }
 
     private void worker() {
@@ -134,18 +117,35 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         MobileAds.initialize(this, initializationStatus -> {
         });
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(idTeste);
-        interstitialAd.loadAd(new AdRequest.Builder().build());
+
+        FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                initAdMob();
+            }
+
+            @Override
+            public void onAdShowedFullScreenContent() {
+                saveChanges();
+            }
+        };
+
+        InterstitialAd.load(this, idTeste,
+                new AdRequest.Builder().build(),
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd ad) {
+                        interstitialAd = ad;
+                        interstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        initAdMob();
+                    }
+                });
 
         configAdBanner();
-
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                interstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-        });
     }
 
     private void configAdBanner() {
@@ -155,19 +155,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     }
 
     private void showAd() {
-        if (interstitialAd.isLoaded()) {
-            interstitialAd.show();
-            List<Manga> listaManga = ((MangaRecyclerAdapter) recyclerView.getAdapter()).getCheckedItems();
-            mangaDB.insertPrediletos(listaManga);
-            mangaDB.insertMangaNome(listaManga);
-            new GenericDialog(this).show("Preferências atualizadas!");
+        if (interstitialAd != null) {
+            interstitialAd.show(MainActivity.this);
         } else {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Log.e(MainActivity.class.getCanonicalName(), "Erro ao tentar exibir AD: " + ex.getMessage());
-            }
-            showAd();
+            saveChanges();
         }
+    }
+
+    private void saveChanges() {
+        List<Manga> listaManga = ((MangaRecyclerAdapter) recyclerView.getAdapter()).getCheckedItems();
+//        mangaDB.insertPrediletos(listaManga);
+//        mangaDB.insertMangaNome(listaManga);
+        new GenericDialog(getApplicationContext()).show("Preferências atualizadas!");
     }
 }

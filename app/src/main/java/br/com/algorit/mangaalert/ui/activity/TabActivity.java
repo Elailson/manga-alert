@@ -12,14 +12,19 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
 import br.com.algorit.mangaalert.R;
-import br.com.algorit.mangaalert.model.Manga;
-import br.com.algorit.mangaalert.model.Novel;
 import br.com.algorit.mangaalert.retrofit.MangaService;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Novel;
 import br.com.algorit.mangaalert.ui.adapter.PagerAdapter;
 import br.com.algorit.mangaalert.util.BlockUI;
 import br.com.algorit.mangaalert.util.Notification;
@@ -28,6 +33,7 @@ import br.com.algorit.mangaalert.util.Worker;
 public class TabActivity extends AppCompatActivity {
 
     private BlockUI blockUI;
+    private InterstitialAd interstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class TabActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        showAd();
         return false;
     }
 
@@ -95,13 +102,8 @@ public class TabActivity extends AppCompatActivity {
         blockUI.stop();
     }
 
-    private void configAdBanner() {
-        AdView adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
-
     private void findMangas() {
+        Log.i(TabActivity.class.getCanonicalName(), "============================================ FIND MANGAS ============================================");
         MangaService mangaService = new MangaService();
         mangaService.findAll(new MangaService.ResponseCallback<List<Manga>>() {
             @Override
@@ -113,11 +115,13 @@ public class TabActivity extends AppCompatActivity {
             @Override
             public void fail(String erro) {
                 Log.e(TabActivity.class.getCanonicalName(), erro);
+                blockUI.stop();
             }
         });
     }
 
     private void findNovels(List<Manga> mangas) {
+        Log.i(TabActivity.class.getCanonicalName(), "============================================ FIND NOVELS ============================================");
         MangaService mangaService = new MangaService();
         mangaService.findAllNovel(new MangaService.ResponseCallback<List<Novel>>() {
             @Override
@@ -128,7 +132,64 @@ public class TabActivity extends AppCompatActivity {
             @Override
             public void fail(String erro) {
                 Log.e(TabActivity.class.getCanonicalName(), erro);
+                blockUI.stop();
             }
         });
+    }
+
+    private void configAdBanner() {
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        initAdMob();
+    }
+
+    private void initAdMob() {
+        String idTeste = "ca-app-pub-3940256099942544/1033173712";
+        String idProd = "ca-app-pub-6750275666832506/4671759050";
+
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+
+        InterstitialAd.load(this, idTeste,
+                new AdRequest.Builder().build(),
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd ad) {
+                        interstitialAd = ad;
+                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                InterstitialAd.load(getApplicationContext(), idTeste,
+                                        new AdRequest.Builder().build(),
+                                        new InterstitialAdLoadCallback() {
+                                            @Override
+                                            public void onAdLoaded(@NonNull InterstitialAd ad) {
+                                                interstitialAd = ad;
+                                            }
+                                        });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        InterstitialAd.load(getApplicationContext(), idTeste,
+                                new AdRequest.Builder().build(),
+                                new InterstitialAdLoadCallback() {
+                                    @Override
+                                    public void onAdLoaded(@NonNull InterstitialAd ad) {
+                                        interstitialAd = ad;
+                                    }
+                                });
+                    }
+                });
+    }
+
+    private void showAd() {
+        if (interstitialAd != null)
+            interstitialAd.show(this);
+        else initAdMob();
     }
 }

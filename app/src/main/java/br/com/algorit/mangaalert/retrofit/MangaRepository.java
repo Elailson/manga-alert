@@ -2,8 +2,8 @@ package br.com.algorit.mangaalert.retrofit;
 
 import java.util.List;
 
-import br.com.algorit.mangaalert.model.Manga;
-import br.com.algorit.mangaalert.model.Novel;
+import br.com.algorit.mangaalert.roomdatabase.model.Manga;
+import br.com.algorit.mangaalert.roomdatabase.model.Novel;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
