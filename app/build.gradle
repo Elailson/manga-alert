@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 
 
 android {
@@ -93,6 +94,10 @@ dependencies {
     // Integration with observables
     implementation "androidx.compose.runtime:runtime-livedata:$rootProject.composeVersion"
     implementation "androidx.compose.runtime:runtime-rxjava2:$rootProject.composeVersion"
+
+    // FIREBASE
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.2'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.2'
     // UI Tests
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.composeVersion"
 }
