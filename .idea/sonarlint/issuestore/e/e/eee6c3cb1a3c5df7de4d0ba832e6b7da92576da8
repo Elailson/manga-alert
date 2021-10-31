@@ -1,0 +1,13 @@
+
+l
+java:S1192b"VDefine a constant instead of duplicating this literal "Failed to read value." 3 times.(Ø‡Ïœ
+
+java:S1186±"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(½Ä³ïşÿÿÿÿ
+˜
+java:S1186¶"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¦›Í
+–
+java:S5803¿"zRemove this usage of "AdRequest", it is annotated with @VisibleForTesting and should not be accessed from production code.(ğ¸Ÿ—ÿÿÿÿÿ
+V
+java:S1854Ê":Remove this useless assignment to local variable "idProd".(ÈÁÏÆıÿÿÿÿ
+G
+java:S1481Ê"+Remove this unused "idProd" local variable.(ÈÁÏÆıÿÿÿÿ

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.algorit.mangaalert">
+    package="br.com.algorit.manga_alert">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.AboutActivity" />
         <activity android:name=".ui.activity.TabActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +25,10 @@
 
         <service
             android:name=".job.MangaJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
-        <!-- ID PROD: ca-app-pub-6750275666832506~1701996695 -->
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- ID PROD: ca-app-pub-7971169796973042~5736343229 -->
+        <!-- ID TESTE: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

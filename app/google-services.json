@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "122524567148",
+    "firebase_url": "https://mangaalert-81d26-default-rtdb.firebaseio.com",
+    "project_id": "mangaalert-81d26",
+    "storage_bucket": "mangaalert-81d26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122524567148:android:c45af2c66362b21609fa49",
+        "android_client_info": {
+          "package_name": "br.com.algorit.manga_alert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122524567148-t5pvaknjau06hi0chsmv7fi2vfk7ulkg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAIOTXnjsJPHzm8xWuKavtA5mWqUT1W5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122524567148-t5pvaknjau06hi0chsmv7fi2vfk7ulkg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

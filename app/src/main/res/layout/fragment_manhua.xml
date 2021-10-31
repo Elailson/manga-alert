@@ -7,14 +7,25 @@
     tools:context=".ui.fragment.ManhuaFragment">
 
     <TextView
+        android:id="@+id/fragment_manhua_texto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/em_desenvolvimento"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_margin="16dp"
+        android:text="Marque seus Manhuas prediletos"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fragment_manhua_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_manhua_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_manhua_texto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

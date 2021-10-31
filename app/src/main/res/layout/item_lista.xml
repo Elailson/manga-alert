@@ -17,10 +17,11 @@
             android:id="@+id/item_lista_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_margin="2dp"
             android:button="@drawable/check_star"
-            android:buttonTint="#FFD700"
+
+            app:layout_constraintBottom_toTopOf="@id/item_lista_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

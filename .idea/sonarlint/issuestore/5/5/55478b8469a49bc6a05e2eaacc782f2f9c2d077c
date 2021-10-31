@@ -1,0 +1,14 @@
+
+L
+java:S1172L"1Remove this unused method parameter "listaManga".(ûµžêÿÿÿÿÿ
+U
+java:S1854n":Remove this useless assignment to local variable "idProd".(ÈÁÏÆýÿÿÿÿ
+–
+java:S5803€"zRemove this usage of "AdRequest", it is annotated with @VisibleForTesting and should not be accessed from production code.(¬©†‘ÿÿÿÿÿ
+Z
+java:S1854 ">Remove this useless assignment to local variable "listaManga".(´Ø›Ñüÿÿÿÿ
+R	java:S125¡"<This block of commented-out lines of code should be removed.(ÏÈÊ¦
+F
+java:S1481n"+Remove this unused "idProd" local variable.(ÈÁÏÆýÿÿÿÿ
+K
+java:S1481 "/Remove this unused "listaManga" local variable.(´Ø›Ñüÿÿÿÿ

@@ -1,13 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="br.com.algorit.mangaalert.ui.activity.TabActivity">
+    tools:context="br.com.algorit.manga_alert.ui.activity.TabActivity">
 
     <item
         android:id="@+id/action_order"
         android:icon="@drawable/ic_baseline_save_24"
-        android:orderInCategory="10"
+        android:orderInCategory="2"
         android:title="Salvar"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_baseline_search"
+        android:orderInCategory="1"
+        android:title="Pesquisar"
         app:showAsAction="always" />
 
 </menu>

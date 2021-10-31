@@ -33,7 +33,8 @@
         android:layout_above="@id/adView"
         android:layout_below="@id/activity_tab_tablayout" />
 
-    <!-- ID PROD: ca-app-pub-6750275666832506/6050088207 -->
+    <!-- ID PROD: ca-app-pub-7971169796973042/8676850265 -->
+    <!-- ID TESTE: ca-app-pub-3940256099942544/6300978111 -->
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"

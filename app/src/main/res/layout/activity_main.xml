@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_main_texto" />
 
-    <!-- ID PROD: ca-app-pub-6750275666832506/6050088207 -->
+    <!-- ID PROD: ca-app-pub-7971169796973042/8676850265 -->
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"

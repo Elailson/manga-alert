@@ -1,0 +1,9 @@
+
+s
+java:S1192i"VDefine a constant instead of duplicating this literal "Failed to read value." 3 times.(Ø‡Ïœ8³ßËÔ‰/
+a
+java:S1128"DRemove this unused import 'java.util.concurrent.ExecutionException'.(¡£ØÍ8œ±œá‹/
+p
+java:S3776¸"RRefactor this method to reduce its Cognitive Complexity from 33 to the 15 allowed.(ĞŸ›8ÙáÙÕ‰/
+
+java:S2142Ş"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ß•Äøÿÿÿÿ8Ï‚œá‹/
