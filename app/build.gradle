@@ -17,9 +17,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            resValue "string", "AD_BANNER_CODE", '"ca-app-pub-3940256099942544/6300978111"'
+            buildConfigField "String", "AD_INTERSTITIAL_CODE", '"ca-app-pub-3940256099942544/1033173712"'
+            buildConfigField "String", "TEST_TEXT", '"Hello World with env variables in test mode"'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "AD_BANNER_CODE", '"ca-app-pub-7971169796973042/8676850265"'
+            buildConfigField "String", "AD_INTERSTITIAL_CODE", '"ca-app-pub-7971169796973042/6863692258"'
+            buildConfigField "String", "TEST_TEXT", '"Hello World with env variables in prod mode"'
         }
     }
 

@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.activity.MainActivity"/>
         <activity android:name=".ui.activity.AboutActivity" />
-        <activity android:name=".ui.activity.TabActivity">
+        <activity android:name=".ui.activity.TabActivity" android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

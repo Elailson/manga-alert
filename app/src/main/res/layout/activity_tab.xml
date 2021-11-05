@@ -33,9 +33,6 @@
         android:layout_above="@id/adView"
         android:layout_below="@id/activity_tab_tablayout" />
 
-    <!-- ID PROD: ca-app-pub-7971169796973042/8676850265 -->
-    <!-- ID TESTE: ca-app-pub-3940256099942544/6300978111 -->
-
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
@@ -43,7 +40,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        ads:adUnitId="@string/AD_BANNER_CODE"
         ads:layout_constraintBottom_toBottomOf="parent" />
 
 </RelativeLayout>

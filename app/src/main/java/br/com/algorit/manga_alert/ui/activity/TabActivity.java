@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.algorit.manga_alert.BuildConfig;
 import br.com.algorit.manga_alert.R;
 import br.com.algorit.manga_alert.room.model.Manga;
 import br.com.algorit.manga_alert.room.model.Manhua;
@@ -198,9 +199,7 @@ public class TabActivity extends AppCompatActivity {
     }
 
     private void createInterstitialAd(AdRequest adRequest) {
-        String idTeste = "ca-app-pub-3940256099942544/1033173712";
-        String idProd = "ca-app-pub-7971169796973042/6863692258";
-        InterstitialAd.load(this, idTeste, adRequest, new InterstitialAdLoadCallback() {
+        InterstitialAd.load(this, BuildConfig.AD_INTERSTITIAL_CODE, adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 mInterstitialAd = interstitialAd;
@@ -230,9 +229,4 @@ public class TabActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TabActivity.class.getCanonicalName(), "ONRESUME");
-    }
 }
