@@ -1,6 +1,4 @@
 
-@
-local.properties,0\7\0712df971a99ac4d2fccb8e0fb19f377f3374cca
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 A
@@ -23,8 +21,6 @@ z
 Japp/src/test/java/br/com/algorit/manga_alert/job/BackgroundWorkerTest.java,a\4\a41fea72aa951bae45d8e9588fb0a0c107547db4
 v
 Fapp/src/main/java/br/com/algorit/manga_alert/job/BackgroundWorker.java,2\9\29bd2051ef5b4a4ca5b5c81497d9b47d0c789472
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 É
 Sapp/src/main/java/br/com/algorit/manga_alert/ui/recyclerview/ItemClickListener.java,a\0\a00b95e132495a02f9b798f3308a18931df9617c
 Å
@@ -35,5 +31,17 @@ r
 Bapp/src/main/java/br/com/algorit/manga_alert/room/dao/BaseDao.java,e\a\ea6fa7ed25993b34a8ccd1d83b75d4b523ef951f
 z
 Japp/src/main/java/br/com/algorit/manga_alert/ui/activity/MainActivity.java,5\5\55478b8469a49bc6a05e2eaacc782f2f9c2d077c
-y
-Iapp/src/main/java/br/com/algorit/manga_alert/ui/activity/TabActivity.java,e\e\eee6c3cb1a3c5df7de4d0ba832e6b7da92576da8
+s
+Capp/src/main/java/br/com/algorit/manga_alert/room/dao/MangaDao.java,8\2\82d193ba4893ae6dea30f2b3a1ea2ee4666716ed
+Å
+Qapp/src/main/java/br/com/algorit/manga_alert/room/repository/MangaRepository.java,7\5\752cd4423286d877f2b037dbac99b43b9416d881
+z
+Japp/src/main/java/br/com/algorit/manga_alert/viewmodel/MangaViewModel.java,9\0\9046d472550d3c7602edfd18f7bc1adbfc4cdf48
+q
+Aapp/src/test/java/br/com/algorit/manga_alert/ExampleUnitTest.java,9\f\9f29a6d4ea7363a5b4cfd124bfe2fcc526e7dfa3
+Ä
+Papp/src/androidTest/java/br/com/algorit/manga_alert/ExampleInstrumentedTest.java,5\5\55ae18ff3cdfc93064a0d7e8378944a39afb6494
+r
+Bapp/src/main/java/br/com/algorit/manga_alert/room/model/Manga.java,f\e\fe5f64e1e40052ef3a412006e099ec04afdbd613
+Ü
+Vapp/src/main/java/br/com/algorit/manga_alert/ui/recyclerview/MangaRecyclerAdapter.java,0\1\015b0c6acbb0f6e3460e8dd5ddd9ac004f2c6f46
